@@ -1,0 +1,89 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    await inicializarApp();
+});
+
+async function inicializarApp() {
+    try {
+        await abrirDB();
+        await cargarObras();
+        configurarEventosGlobales();
+    } catch (error) {
+        console.error('Error al inicializar la app:', error);
+        mostrarError('Error al inicializar la aplicación');
+    }
+}
+
+function configurarEventosGlobales() {
+    // Cerrar modales con Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            cerrarTodosModales();
+        }
+    });
+    
+    // Cerrar modales haciendo clic fuera
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            cerrarTodosModales();
+        }
+    });
+}
+
+function cerrarTodosModales() {
+    document.getElementById('modal-obra').style.display = 'none';
+    document.getElementById('modal-personaje').style.display = 'none';
+    document.getElementById('modal-relacion').style.display = 'none';
+    document.getElementById('modal-confirmar').style.display = 'none';
+}
+
+function escapeHTML(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function mostrarError(mensaje) {
+    // Crear notificación toast
+    const toast = document.createElement('div');
+    toast.className = 'toast-error';
+    toast.textContent = mensaje;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #dc3545;
+        color: white;
+        padding: 1rem;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 2000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Añadir estilos para animaciones
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .toast-error {
+        transition: opacity 0.3s ease;
+    }
+`;
+document.head.appendChild(style);
