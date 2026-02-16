@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Personajes Literarios</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a6fa5">
+    <meta name="description" content="Organiza los personajes de tus obras literarias">
+</head>
+<body>
+    <!-- Pantalla de selección/creación de obras -->
+    <div id="pantalla-obras" class="pantalla-activa">
+        <header>
+            <h1>📚 Mis Obras Literarias</h1>
+            <button id="nueva-obra" class="btn-primario">+ Nueva Obra</button>
+        </header>
+        
+        <main class="obras-container">
+            <div id="obras-grid" class="obras-grid">
+                <!-- Las obras se cargarán aquí -->
+            </div>
+        </main>
+    </div>
+    
+    <!-- Pantalla de gestión de personajes (se muestra al seleccionar una obra) -->
+    <div id="pantalla-personajes" class="pantalla-oculta">
+        <header>
+            <div class="header-left">
+                <button id="volver-obras" class="btn-icono" title="Volver a obras">←</button>
+                <h1 id="titulo-obra-actual"></h1>
+            </div>
+            <div class="header-right">
+                <button id="ver-relaciones" class="btn-secundario">🌳 Ver Árbol</button>
+                <button id="nuevo-personaje" class="btn-primario">+ Nuevo Personaje</button>
+            </div>
+        </header>
+        
+        <main>
+            <aside class="filtros">
+                <h3>Filtros</h3>
+                <select id="filtro-genero">
+                    <option value="">Todos los géneros</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="otro">Otro</option>
+                </select>
+                <select id="filtro-rol">
+                    <option value="">Todos los roles</option>
+                    <option value="protagonista">Protagonista</option>
+                    <option value="antagonista">Antagonista</option>
+                    <option value="secundario">Secundario</option>
+                    <option value="terciario">Terciario</option>
+                </select>
+                <button id="ver-todos" class="btn-secundario btn-full">Ver todos</button>
+            </aside>
+            
+            <section class="personajes-grid" id="personajes-container">
+                <!-- Los personajes se cargarán aquí -->
+            </section>
+        </main>
+    </div>
+    
+    <!-- Pantalla de árbol de relaciones -->
+    <div id="pantalla-relaciones" class="pantalla-oculta">
+        <header>
+            <div class="header-left">
+                <button id="volver-personajes" class="btn-icono" title="Volver a personajes">←</button>
+                <h1>Árbol de Relaciones - <span id="obra-arbol"></span></h1>
+            </div>
+            <div class="header-right">
+                <button id="nueva-relacion" class="btn-primario">+ Nueva Relación</button>
+            </div>
+        </header>
+        
+        <main class="arbol-container">
+            <div id="arbol-genealogico" class="arbol-genealogico">
+                <!-- El árbol se renderizará aquí con canvas o SVG -->
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal para crear/editar obra -->
+    <div id="modal-obra" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar" onclick="cerrarModalObra()">&times;</span>
+            <h2 id="modal-obra-titulo">Nueva Obra</h2>
+            <form id="form-obra">
+                <input type="hidden" id="obra-id">
+                
+                <div class="campo-form">
+                    <label for="obra-titulo">Título de la obra *</label>
+                    <input type="text" id="obra-titulo" required placeholder="Ej: La sombra del viento">
+                </div>
+                
+                <div class="campo-form">
+                    <label for="obra-genero">Género literario</label>
+                    <select id="obra-genero">
+                        <option value="">Seleccionar género</option>
+                        <option value="novela">Novela</option>
+                        <option value="cuento">Cuento</option>
+                        <option value="poesia">Poesía</option>
+                        <option value="teatro">Teatro</option>
+                        <option value="ensayo">Ensayo</option>
+                    </select>
+                </div>
+                
+                <div class="campo-form">
+                    <label for="obra-descripcion">Descripción</label>
+                    <textarea id="obra-descripcion" rows="3" placeholder="Breve descripción de la obra..."></textarea>
+                </div>
+                
+                <div class="acciones-form">
+                    <button type="button" class="btn-secundario" onclick="cerrarModalObra()">Cancelar</button>
+                    <button type="submit" class="btn-primario">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para crear/editar personaje (actualizado con género) -->
+    <div id="modal-personaje" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar" onclick="cerrarModalPersonaje()">&times;</span>
+            <h2 id="modal-personaje-titulo">Nuevo Personaje</h2>
+            <form id="form-personaje">
+                <input type="hidden" id="personaje-id">
+                <input type="hidden" id="personaje-obra-id">
+                
+                <div class="campo-form">
+                    <label for="nombre">Nombre *</label>
+                    <input type="text" id="nombre" required>
+                </div>
+                
+                <div class="campo-form">
+                    <label for="genero">Género *</label>
+                    <select id="genero" required>
+                        <option value="">Seleccionar género</option>
+                        <option value="masculino">Masculino (🟦 Azul)</option>
+                        <option value="femenino">Femenino (🟪 Rosado)</option>
+                        <option value="otro">Otro (🟩 Verde)</option>
+                    </select>
+                </div>
+                
+                <div class="campo-form">
+                    <label for="rol">Rol *</label>
+                    <select id="rol" required>
+                        <option value="">Seleccionar rol</option>
+                        <option value="protagonista">Protagonista</option>
+                        <option value="antagonista">Antagonista</option>
+                        <option value="secundario">Secundario</option>
+                        <option value="terciario">Terciario</option>
+                    </select>
+                </div>
+                
+                <div class="campo-form">
+                    <label for="edad">Edad</label>
+                    <input type="number" id="edad" min="0" max="999">
+                </div>
+                
+                <div class="campo-form">
+                    <label for="personalidad">Personalidad</label>
+                    <textarea id="personalidad" rows="2" placeholder="Rasgos principales..."></textarea>
+                </div>
+                
+                <div class="campo-form">
+                    <label for="historia">Historia/Background</label>
+                    <textarea id="historia" rows="3" placeholder="Pasado del personaje..."></textarea>
+                </div>
+                
+                <div class="acciones-form">
+                    <button type="button" class="btn-secundario" onclick="cerrarModalPersonaje()">Cancelar</button>
+                    <button type="submit" class="btn-primario">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para crear relaciones -->
+    <div id="modal-relacion" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar" onclick="cerrarModalRelacion()">&times;</span>
+            <h2>Nueva Relación</h2>
+            <form id="form-relacion">
+                <input type="hidden" id="relacion-obra-id">
+                
+                <div class="campo-form">
+                    <label for="personaje-origen">Personaje *</label>
+                    <select id="personaje-origen" required>
+                        <option value="">Seleccionar personaje</option>
+                    </select>
+                </div>
+                
+                <div class="campo-form">
+                    <label for="tipo-relacion">Tipo de relación *</label>
+                    <select id="tipo-relacion" required>
+                        <option value="">Seleccionar tipo</option>
+                        <option value="padre">Padre</option>
+                        <option value="madre">Madre</option>
+                        <option value="hijo">Hijo</option>
+                        <option value="hija">Hija</option>
+                        <option value="hermano">Hermano</option>
+                        <option value="hermana">Hermana</option>
+                        <option value="esposo">Esposo</option>
+                        <option value="esposa">Esposa</option>
+                        <option value="amigo">Amigo</option>
+                        <option value="enemigo">Enemigo</option>
+                    </select>
+                </div>
+                
+                <div class="campo-form">
+                    <label for="personaje-destino">Con *</label>
+                    <select id="personaje-destino" required>
+                        <option value="">Seleccionar personaje</option>
+                    </select>
+                </div>
+                
+                <div class="acciones-form">
+                    <button type="button" class="btn-secundario" onclick="cerrarModalRelacion()">Cancelar</button>
+                    <button type="submit" class="btn-primario">Crear Relación</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="js/db.js"></script>
+    <script src="js/obras.js"></script>
+    <script src="js/personajes.js"></script>
+    <script src="js/relaciones.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

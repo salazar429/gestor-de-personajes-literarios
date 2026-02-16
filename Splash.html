@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Personajes - Inicio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .splash-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .splash-logo {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .splash-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .splash-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+        
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: white;
+            animation: load 2s ease-in-out forwards;
+        }
+        
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        .loading-text {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container">
+        <div class="splash-logo">📚</div>
+        <h1 class="splash-title">Gestor de Personajes</h1>
+        <p class="splash-subtitle">Organiza tus personajes y sus relaciones</p>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        <p class="loading-text" id="loading-message">Cargando tu biblioteca de obras...</p>
+    </div>
+    
+    <script>
+        // Redirigir después de la animación
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 2000);
+        
+        // Mensajes dinámicos
+        const mensajes = [
+            "Preparando tus personajes...",
+            "Organizando relaciones...",
+            "Cargando árbol genealógico..."
+        ];
+        
+        let index = 0;
+        setInterval(() => {
+            index = (index + 1) % mensajes.length;
+            document.getElementById('loading-message').textContent = mensajes[index];
+        }, 600);
+    </script>
+</body>
+</html>
