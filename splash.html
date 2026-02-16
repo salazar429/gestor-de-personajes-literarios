@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Personajes - Inicio</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/gestor-de-personajes-literarios/css/styles.css">
+    <link rel="manifest" href="/gestor-de-personajes-literarios/manifest.json">
+    <meta name="theme-color" content="#4a6fa5">
     <style>
         .splash-container {
             min-height: 100vh;
@@ -79,9 +81,14 @@
     </div>
     
     <script>
+        // Detectar si estamos en GitHub Pages o local
+        const basePath = window.location.hostname.includes('github.io') 
+            ? '/gestor-de-personajes-literarios' 
+            : '';
+            
         // Redirigir después de la animación
         setTimeout(() => {
-            window.location.href = 'index.html';
+            window.location.href = basePath + '/index.html';
         }, 2000);
         
         // Mensajes dinámicos
