@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Personajes Literarios</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="/gestor-de-personajes-literarios/css/styles.css">
+    <link rel="manifest" href="/gestor-de-personajes-literarios/manifest.json">
     <meta name="theme-color" content="#4a6fa5">
     <meta name="description" content="Organiza los personajes de tus obras literarias">
+    <base href="/gestor-de-personajes-literarios/">
 </head>
 <body>
     <!-- Pantalla de selección/creación de obras -->
@@ -224,10 +225,22 @@
         </div>
     </div>
     
-    <script src="js/db.js"></script>
-    <script src="js/obras.js"></script>
-    <script src="js/personajes.js"></script>
-    <script src="js/relaciones.js"></script>
-    <script src="js/app.js"></script>
+    <!-- Modal de confirmación para eliminar -->
+    <div id="modal-confirmar" class="modal">
+        <div class="modal-contenido modal-pequeno">
+            <h3>Confirmar eliminación</h3>
+            <p>¿Estás seguro de que quieres eliminar este elemento?</p>
+            <div class="acciones-form">
+                <button class="btn-secundario" onclick="cerrarModalConfirmar()">Cancelar</button>
+                <button id="confirmar-eliminar" class="btn-peligro">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/gestor-de-personajes-literarios/js/db.js"></script>
+    <script src="/gestor-de-personajes-literarios/js/obras.js"></script>
+    <script src="/gestor-de-personajes-literarios/js/personajes.js"></script>
+    <script src="/gestor-de-personajes-literarios/js/relaciones.js"></script>
+    <script src="/gestor-de-personajes-literarios/js/app.js"></script>
 </body>
 </html>
